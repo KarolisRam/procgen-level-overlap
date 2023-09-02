@@ -24,8 +24,6 @@ def process_images(directory):
 
         # If duplicate, append 1 else 0
         if img_hash in hashes_seen:
-            print(img_path)
-            return
             last_1000.append(1)
         else:
             last_1000.append(0)
@@ -46,6 +44,6 @@ def plot_data(data):
 
 
 if __name__ == "__main__":
-    directory = "/home/karolis/k/procgen-level-overlap/seeds/maze"
+    directory = "/home/karolis/k/procgen-level-overlap/seeds/easy/bigfish"
     running_avg = process_images(directory)
     plot_data(running_avg)
