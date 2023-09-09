@@ -20,7 +20,7 @@ def main():
             os.makedirs(os.path.join(PATH, DIFF, ENV), exist_ok=True)
             for seed in tqdm(range(200000)):
                 env = gym.make(f'procgen:procgen-{ENV}-v0', start_level=seed, num_levels=1, distribution_mode=DIFF,
-                               center_agent=False)
+                               center_agent=CENTER)
                 obs = env.reset()
                 plt.imsave(os.path.join(PATH, DIFF, ENV, f'seed-{seed:08}.png'), obs)
                 env.close()
