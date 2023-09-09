@@ -1,13 +1,15 @@
 import os
 import hashlib
-from tqdm import tqdm
+import matplotlib.pyplot as plt
+import shutil
 
 PATHS = ['../seeds/',
          '../seeds-center/']
+PATH_OUT = '../duplicate-seeds-only/'
+# PATH = '../seeds-center/'
 ENVS = ['bigfish', 'bossfight', 'caveflyer', 'chaser', 'climber', 'coinrun', 'dodgeball', 'fruitbot', 'heist', 'jumper',
         'leaper', 'maze', 'miner', 'ninja', 'plunder', 'starpilot']
 DIFFS = ['easy', 'hard']
-TQDM = False
 
 
 def compute_md5_hash(img_path):
@@ -29,15 +31,19 @@ def count_overlaps(directory, first_x=100000):
     second_half = img_paths[100000:]
 
     # Compute hashes for the first half
-    for img_path in tqdm(first_half, disable=not TQDM):
+    for img_path in first_half:
         img_hash = compute_md5_hash(img_path)
         hashes_seen.add(img_hash)
 
     # Check overlaps in the second half
     overlaps = 0
-    for img_path in tqdm(second_half, disable=not TQDM):
+    for img_path in second_half:
         img_hash = compute_md5_hash(img_path)
         if img_hash in hashes_seen:
+            fname = img_path.split('/')[-1]
+            out_path = os.path.join(PATH_OUT, DIFF, ENV, fname)
+            if overlaps < 1000:
+                shutil.copy(img_path, out_path)
             overlaps += 1
 
     return overlaps
@@ -46,11 +52,12 @@ def count_overlaps(directory, first_x=100000):
 if __name__ == "__main__":
     for PATH in PATHS:
         print(PATH)
-        # for first_x in [100000]:
-        for first_x in [1, 10, 100, 1000, 10000, 100000]:
-            for DIFF in DIFFS:
-                for ENV in ENVS:
-                    directory = os.path.join(PATH, DIFF, ENV)
+        for DIFF in DIFFS:
+            for ENV in ENVS:
+                os.makedirs(os.path.join(PATH_OUT, PATH[3:], DIFF, ENV), exist_ok=True)
+                # for first_x in [1, 10, 100, 1000, 10000, 100000]:
+                print(f'saving {DIFF} {ENV}.')
+                for first_x in [100000]:
+                    directory = os.path.join(PATH, PATH[3:], DIFF, ENV)
                     overlaps = count_overlaps(directory, first_x=first_x)
-                    print(f"Overlapping images {DIFF}-{ENV}, {first_x} training levels: {overlaps/100000*100:.10f}%")
-        print()
+                    print(f"Overlapping images {DIFF}-{ENV}, {first_x} training levels: {overlaps/100000*100:.6f}%")

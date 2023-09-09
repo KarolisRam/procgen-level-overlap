@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 import os
 from tqdm import tqdm
 
-PATH = '/home/karolis/k/procgen-level-overlap/seeds/'
-# PATH = '/home/karolis/k/procgen-level-overlap/seeds-center/'
+CENTER = True
+if CENTER:
+    PATH = '../seeds/'
+else:
+    PATH = '../seeds-center/'
 ENVS = ['bigfish', 'bossfight', 'caveflyer', 'chaser', 'climber', 'coinrun', 'dodgeball', 'fruitbot', 'heist', 'jumper',
         'leaper', 'maze', 'miner', 'ninja', 'plunder', 'starpilot']
 DIFFS = ['easy', 'hard']
@@ -20,6 +23,7 @@ def main():
                                center_agent=False)
                 obs = env.reset()
                 plt.imsave(os.path.join(PATH, DIFF, ENV, f'seed-{seed:08}.png'), obs)
+                env.close()
 
 
 if __name__ == '__main__':
