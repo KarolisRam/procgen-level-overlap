@@ -53,14 +53,18 @@ def count_overlaps(directory, first_x=100000, save_dupes=100):
     return overlaps
 
 
-if __name__ == "__main__":
+def main():
     for PATH in PATHS:
         print(PATH)
-        for first_x in [100000]:
         # for first_x in [1, 10, 100, 1000, 10000, 100000]:
+        for first_x in [100000]:
             for DIFF in DIFFS:
                 for ENV in ENVS:
                     directory = os.path.join(PATH, DIFF, ENV)
                     overlaps = count_overlaps(directory, first_x=first_x, save_dupes=SAVE_DUPES)
                     print(f"Overlapping images {DIFF}-{ENV}, {first_x} training levels: {overlaps/100000*100:.10f}%")
         print()
+
+
+if __name__ == "__main__":
+    main()
