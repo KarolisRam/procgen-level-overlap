@@ -1,3 +1,4 @@
+# Using the generated level images, measure how much overlap there is between the first half and the second half.
 import hashlib
 import os
 import shutil
